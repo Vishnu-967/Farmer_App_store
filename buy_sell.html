@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buy and Sell - Farmer Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        .page-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .back-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            text-decoration: none;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .back-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-5px);
+        }
+
+        /* Buy/Sell Tabs */
+        .tabs-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .tab {
+            padding: 12px 25px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            background: var(--primary-green);
+            color: black;
+            border-color: var(--primary-green);
+            box-shadow: 0 0 15px rgba(46, 204, 113, 0.3);
+        }
+
+        /* Listing Grid */
+        .listing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .item-card {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+
+        .item-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .item-image {
+            height: 180px;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+        }
+
+        .item-details {
+            padding: 20px;
+        }
+
+        .item-tag {
+            display: inline-block;
+            padding: 4px 10px;
+            background: rgba(46, 204, 113, 0.1);
+            color: var(--primary-green);
+            font-size: 11px;
+            text-transform: uppercase;
+            font-weight: 700;
+            border-radius: 4px;
+            margin-bottom: 12px;
+        }
+
+        .item-price {
+            font-size: 22px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .item-title {
+            color: white;
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .item-loc {
+            color: var(--text-muted);
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 15px;
+        }
+
+        .contact-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            text-align: center;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .contact-btn:hover {
+            background: var(--primary-green);
+            color: black;
+        }
+
+        .revealed-num {
+            display: none;
+            font-weight: 700;
+            color: var(--primary-green);
+            font-size: 16px;
+            margin-top: 5px;
+        }
+
+        .contact-btn.revealed {
+            background: #27ae60;
+            border-color: #27ae60;
+        }
+
+        /* Post Ad Button */
+        .post-ad-btn {
+            background: var(--primary-green);
+            color: black;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: transform 0.2s;
+        }
+
+        .post-ad-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: #1a1a1a;
+            margin: 5% auto;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            width: 90%;
+            max-width: 500px;
+            border-radius: 20px;
+            position: relative;
+            color: white;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .close-btn {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 28px;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .form-group select,
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary-green);
+            color: black;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+
+        .submit-btn:hover {
+            filter: brightness(1.1);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-left">
+            <div class="logo-circle-small">
+                <img src="assets/logo.png" alt="Farmers Logo">
+            </div>
+            <span class="nav-title" data-t="buy_sell">Buy & Sell</span>
+        </div>
+        <div class="nav-right">
+            <a href="dashboard.html" class="logout-btn" id="dash-link"
+                style="color:white; background: rgba(255,255,255,0.1);" data-t="dashboard">Dashboard</a>
+        </div>
+    </nav>
+
+    <div class="page-container">
+        <div class="header-section">
+            <div>
+                <a href="dashboard.html" class="back-link" id="back-link">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7" />
+                    </svg>
+                    <span data-t="back_to_portal">Back to Portal</span>
+                </a>
+            </div>
+            <a href="javascript:void(0)" class="post-ad-btn" onclick="openModal()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+                <span data-t="post_ad">Post Your Ad</span>
+            </a>
+        </div>
+
+        <div class="tabs-container">
+            <div class="tab active" onclick="filterItems('all', this)" data-t="all_items">All Items</div>
+            <div class="tab" onclick="filterItems('equipment', this)" data-t="equipment_vehicles">Equipment & Vehicles
+            </div>
+            <div class="tab" onclick="filterItems('seeds', this)" data-t="seeds_fertilizers">Seeds & Fertilisers</div>
+            <div class="tab" onclick="filterItems('livestock', this)" data-t="livestock_tab">Livestock</div>
+        </div>
+
+        <div class="listing-grid">
+            <!-- Item 1 -->
+            <div class="item-card" data-category="equipment">
+                <div class="item-image">🚜</div>
+                <div class="item-details">
+                    <span class="item-tag" data-t="tag_equipment">Equipment</span>
+                    <div class="item-price">₹ 4,50,000</div>
+                    <div class="item-title">Sonalika Tractor 2021</div>
+                    <div class="item-loc">📍 Badvel, Kadapa</div>
+                    <div id="num-1" class="revealed-num">📞 6305998434</div>
+                    <a href="javascript:void(0)" class="contact-btn" data-t="contact_seller"
+                        onclick="revealContact(this, '6305998434')">Contact
+                        Seller</a>
+                </div>
+            </div>
+
+            <!-- Item 2 -->
+            <div class="item-card" data-category="seeds">
+                <div class="item-image">🌱</div>
+                <div class="item-details">
+                    <span class="item-tag">Seeds</span>
+                    <div class="item-price">₹ 1,200</div>
+                    <div class="item-title">Organic Rice Seeds (25kg)</div>
+                    <div class="item-loc">📍 Kodur, Kadapa</div>
+                    <div id="num-1" class="revealed-num">📞 6305998434</div>
+                    <a href="javascript:void(0)" class="contact-btn" onclick="revealContact(this, '6305998434')">Contact
+                        Seller</a>
+                </div>
+            </div>
+
+            <!-- Item 3 -->
+            <div class="item-card" data-category="livestock">
+                <div class="item-image">🐃</div>
+                <div class="item-details">
+                    <span class="item-tag">Livestock</span>
+                    <div class="item-price">₹ 85,000</div>
+                    <div class="item-title">Healthy Murrah Buffalo</div>
+                    <div class="item-loc">📍 Siddavatam, Kadapa</div>
+                    <div id="num-1" class="revealed-num">📞 6305998434</div>
+                    <a href="javascript:void(0)" class="contact-btn" onclick="revealContact(this, '6305998434')">Contact
+                        Seller</a>
+                </div>
+            </div>
+
+            <!-- Item 4 -->
+            <div class="item-card" data-category="equipment">
+                <div class="item-image">⛽</div>
+                <div class="item-details">
+                    <span class="item-tag">Tools</span>
+                    <div class="item-price">₹ 15,500</div>
+                    <div class="item-title">Power Tiller - Used</div>
+                    <div class="item-loc">📍 Bhakarapeta, Kadapa</div>
+                    <div id="num-1" class="revealed-num">📞 6305998434</div>
+                    <a href="javascript:void(0)" class="contact-btn" onclick="revealContact(this, '6305998434')">Contact
+                        Seller</a>
+                </div>
+            </div>
+
+            <!-- Item 5 - Car -->
+            <div class="item-card" data-category="equipment">
+                <div class="item-image">🚗</div>
+                <div class="item-details">
+                    <span class="item-tag">Vehicle</span>
+                    <div class="item-price">₹ 3,20,000</div>
+                    <div class="item-title">Maruti Suzuki Alto (2018)</div>
+                    <div class="item-loc">📍 Kadapa City</div>
+                    <div class="revealed-num">📞 6305998434</div>
+                    <a href="javascript:void(0)" class="contact-btn" onclick="revealContact(this, '6305998434')">Contact
+                        Seller</a>
+                </div>
+            </div>
+
+            <!-- Item 6 - Bike -->
+            <div class="item-card" data-category="equipment">
+                <div class="item-image">🏍️</div>
+                <div class="item-details">
+                    <span class="item-tag">Vehicle</span>
+                    <div class="item-price">₹ 45,000</div>
+                    <div class="item-title">Hero Splendor Plus</div>
+                    <div class="item-loc">📍 Badvel, Kadapa</div>
+                    <div class="revealed-num">📞 6305998434</div>
+                    <a href="javascript:void(0)" class="contact-btn" onclick="revealContact(this, '6305998434')">Contact
+                        Seller</a>
+                </div>
+            </div>
+
+            <!-- New requested items in Livestock -->
+            <!-- Item 7 - Tomato (categorized as livestock as requested) -->
+            <div class="item-card" data-category="livestock">
+                <div class="item-image">🍅</div>
+                <div class="item-details">
+                    <span class="item-tag">Livestock</span>
+                    <div class="item-price">₹ 40 / kg</div>
+                    <div class="item-title">Fresh Tomatoes (Organic)</div>
+                    <div class="item-loc">📍 Siddavatam, Kadapa</div>
+                    <div class="revealed-num">📞 6305998434</div>
+                    <a href="javascript:void(0)" class="contact-btn" onclick="revealContact(this, '6305998434')">Contact
+                        Seller</a>
+                </div>
+            </div>
+
+            <!-- Item 8 - Dress -->
+            <div class="item-card" data-category="livestock">
+                <div class="item-image">👕</div>
+                <div class="item-details">
+                    <span class="item-tag">Livestock</span>
+                    <div class="item-price">₹ 800</div>
+                    <div class="item-title">Traditional Farmer Dress</div>
+                    <div class="item-loc">📍 Kodur, Kadapa</div>
+                    <div class="revealed-num">📞 6305998434</div>
+                    <a href="javascript:void(0)" class="contact-btn" onclick="revealContact(this, '6305998434')">Contact
+                        Seller</a>
+                </div>
+            </div>
+
+            <!-- Item 9 - Fertilisers -->
+            <div class="item-card" data-category="seeds">
+                <div class="item-image">💩</div>
+                <div class="item-details">
+                    <span class="item-tag">Fertiliser</span>
+                    <div class="item-price">₹ 500 / bag</div>
+                    <div class="item-title">Organic Vermicompost (50kg)</div>
+                    <div class="item-loc">📍 Badvel, Kadapa</div>
+                    <div class="revealed-num">📞 6305998434</div>
+                    <a href="javascript:void(0)" class="contact-btn" onclick="revealContact(this, '6305998434')">Contact
+                        Seller</a>
+                </div>
+            </div>
+
+            <!-- Item 10 - Neem Cake -->
+            <div class="item-card" data-category="seeds">
+                <div class="item-image">🌿</div>
+                <div class="item-details">
+                    <span class="item-tag">Fertiliser</span>
+                    <div class="item-price">₹ 350 / bag</div>
+                    <div class="item-title">Pure Neem Cake Powder</div>
+                    <div class="item-loc">📍 Bhakarapeta, Kadapa</div>
+                    <div class="revealed-num">📞 6305998434</div>
+                    <a href="javascript:void(0)" class="contact-btn" onclick="revealContact(this, '6305998434')">Contact
+                        Seller</a>
+                </div>
+            </div>
+
+            <!-- Item 11 - Bio Fertiliser -->
+            <div class="item-card" data-category="seeds">
+                <div class="item-image">🧪</div>
+                <div class="item-details">
+                    <span class="item-tag">Fertiliser</span>
+                    <div class="item-price">₹ 1,200 / pack</div>
+                    <div class="item-title">Liquid Bio-Fertilizer (5L)</div>
+                    <div class="item-loc">📍 Siddavatam, Kadapa</div>
+                    <div class="revealed-num">📞 6305998434</div>
+                    <a href="javascript:void(0)" class="contact-btn" onclick="revealContact(this, '6305998434')">Contact
+                        Seller</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden Ad Post Modal -->
+    <div id="adModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2 style="margin-bottom: 25px;">Post New Ad</h2>
+            <form id="adForm">
+                <div class="form-group">
+                    <label>Select Crop / Item Type</label>
+                    <select id="itemType" required>
+                        <option value="" disabled selected>-- Select --</option>
+                        <option value="paddy">🌾 Paddy (Rice)</option>
+                        <option value="tomato">🍅 Tomato</option>
+                        <option value="onion">🧅 Onion</option>
+                        <option value="tractor">🚜 Tractor</option>
+                        <option value="car">🚗 Car</option>
+                        <option value="bike">🏍️ Bike</option>
+                        <option value="dress">👗 Dress / Clothing</option>
+                        <option value="fertilizer">💩 Organic Fertiliser</option>
+                        <option value="equipment">🛠️ Other Equipment</option>
+                        <option value="livestock">🐃 Livestock</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Quantity (in kg or Quintals)</label>
+                    <input type="text" placeholder="e.g. 500 kg" required>
+                </div>
+                <div class="form-group">
+                    <label>Expected Price (₹)</label>
+                    <input type="number" placeholder="Enter your price" required>
+                </div>
+                <div class="form-group">
+                    <label>Location</label>
+                    <input type="text" placeholder="Your village name" required>
+                </div>
+                <div class="form-group">
+                    <label>Upload Images</label>
+                    <input type="file" id="imageInput" accept="image/*" multiple style="border: none; padding: 5px 0;">
+                    <p style="font-size: 11px; color: #888; margin-top: 5px;">Upload up to 3 photos of your crop/item.
+                    </p>
+                </div>
+                <button type="submit" class="submit-btn" style="margin-top: 10px;">Post My Ad</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function openModal() {
+            document.getElementById('adModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('adModal').style.display = 'none';
+        }
+
+        window.onclick = function (event) {
+            const modal = document.getElementById('adModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+
+        document.getElementById('adForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const itemType = document.getElementById('itemType').value;
+            const quantity = event.target.querySelector('input[placeholder*="e.g."]').value;
+            const price = event.target.querySelector('input[type="number"]').value;
+            const location = event.target.querySelector('input[placeholder*="village"]').value;
+            const imageInput = document.getElementById('imageInput');
+
+            // Map sub-categories to main tabs
+            let mainCategory = "equipment";
+            if (itemType === 'paddy' || itemType === 'tomato' || itemType === 'onion' || itemType === 'fertilizer') mainCategory = 'seeds'; // Grouping under Seeds & Fertilisers
+            if (itemType === 'dress' || itemType === 'livestock') mainCategory = 'livestock';
+
+            const reader = new FileReader();
+
+            if (imageInput.files && imageInput.files[0]) {
+                reader.onload = function (e) {
+                    createNewAdCard(itemType, quantity, price, location, e.target.result, mainCategory);
+                };
+                reader.readAsDataURL(imageInput.files[0]);
+            } else {
+                createNewAdCard(itemType, quantity, price, location, null, mainCategory);
+            }
+
+            alert("Success! Your ad for " + itemType + " has been posted successfully.");
+            closeModal();
+            event.target.reset();
+        });
+
+        function createNewAdCard(type, qty, price, loc, imageSrc, category) {
+            const grid = document.querySelector('.listing-grid');
+            const card = document.createElement('div');
+            card.className = 'item-card';
+            card.setAttribute('data-category', category);
+
+            const typeLabels = {
+                paddy: "🌾 Paddy",
+                tomato: "🍅 Tomato",
+                onion: "🧅 Onion",
+                tractor: "🚜 Tractor",
+                car: "🚗 Car",
+                bike: "🏍️ Bike",
+                dress: "👕 Dress",
+                fertilizer: "💩 Fertiliser",
+                equipment: "🛠️ Equipment",
+                livestock: "🐃 Livestock"
+            };
+
+            const imageContent = imageSrc ? `<img src="${imageSrc}" alt="Crop Image">` : "🛒";
+            const phone = "6305998434"; // Standard contact for demo
+
+            card.innerHTML = `
+                <div class="item-image">${imageContent}</div>
+                <div class="item-details">
+                    <span class="item-tag">${type}</span>
+                    <div class="item-price">₹ ${parseInt(price).toLocaleString('en-IN')}</div>
+                    <div class="item-title">${typeLabels[type] || type} (${qty})</div>
+                    <div class="item-loc">📍 ${loc}, Kadapa</div>
+                    <div class="revealed-num">📞 ${phone}</div>
+                    <a href="javascript:void(0)" class="contact-btn" onclick="revealContact(this, '${phone}')">Contact Seller</a>
+                </div>
+            `;
+
+            grid.prepend(card);
+
+            // Re-apply filter if active tab is not 'all'
+            const activeTab = document.querySelector('.tab.active');
+            if (activeTab && !activeTab.innerText.includes('All')) {
+                const cat = activeTab.getAttribute('onclick').match(/'([^']+)'/)[1];
+                filterItems(cat, activeTab);
+            }
+        }
+
+        function filterItems(category, el) {
+            // Update Active Tab
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            el.classList.add('active');
+
+            const cards = document.querySelectorAll('.item-card');
+            cards.forEach(card => {
+                if (category === 'all' || card.getAttribute('data-category') === category) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function revealContact(btn, phone) {
+            const numDiv = btn.previousElementSibling;
+            numDiv.style.display = 'block';
+            btn.innerText = "Call Seller Now";
+            btn.classList.add('revealed');
+            btn.onclick = () => window.location.href = 'tel:' + phone;
+        }
+    </script>
+</body>
+
+</html>

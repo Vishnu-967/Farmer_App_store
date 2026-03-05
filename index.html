@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmer Portal - Login</title>
+    <!-- Modern Google Font: Outfit -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Logo moved to the top left of the whole page -->
+    <div class="logo-container">
+        <div class="logo-circle">
+            <img src="assets/logo.png" alt="Farmers Logo" class="logo">
+        </div>
+        <!-- Language Selector -->
+        <div class="lang-selector-login" style="margin-top: 15px;">
+            <select id="lang-select" onchange="changePortalLanguage(this.value)"
+                style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); padding: 5px 10px; border-radius: 8px; cursor: pointer;">
+                <option value="en">English</option>
+                <option value="te">తెలుగు (Telugu)</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Main Header Centered at top -->
+    <div class="header-section">
+        <h1 class="welcome-title" data-t="index_welcome">Welcome to Farmer Portal</h1>
+        <p class="tagline" data-t="index_tagline">Empowering Farmers for a better Tomorrow</p>
+    </div>
+
+    <!-- Login Area pushed somewhat down -->
+    <div class="login-wrapper">
+        <div class="login-container">
+            <!-- Standard Login Form -->
+            <form class="login-form" id="standard-login-form">
+                <div class="input-group">
+                    <label for="username" data-t="username_label">Username</label>
+                    <input type="text" id="username" placeholder="Enter your username" data-t="username_placeholder">
+                </div>
+
+                <div class="input-group">
+                    <label for="password" data-t="password_label">Password</label>
+                    <input type="password" id="password" placeholder="Enter your password"
+                        data-t="password_placeholder">
+                </div>
+
+                <div class="form-actions">
+                    <label class="remember-me">
+                        <input type="checkbox">
+                        <span data-t="remember_me">Remember me</span>
+                    </label>
+                    <a href="#" class="forgot-password" onclick="toggleForms(event, 'forgot')"
+                        data-t="forgot_password">Forgot Password?</a>
+                </div>
+
+                <button type="button" class="login-btn" onclick="navigateToDashboard('login')">
+                    <span data-t="login_btn">Login</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </button>
+                <div style="text-align: center; margin-top: 15px;">
+                    <a href="#" onclick="navigateToDashboard('guest')"
+                        style="color: #4CAF50; text-decoration: none; font-size: 14px; font-weight: 500;">Continue as
+                        Guest</a>
+                </div>
+
+            </form>
+
+            <div class="footer-section" id="create-account-footer">
+                <p><span data-t="new_to_portal">New to the portal?</span> <a href="#"
+                        onclick="toggleForms(event, 'register')" data-t="create_account">Create an account</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- New page footer / motto at the very bottom -->
+    <div class="page-footer">
+        <h2 data-t="motto">Farmers-The Backbone of our Nation</h2>
+    </div>
+
+    <script src="translations.js"></script>
+    <script>
+        function toggleForms(e, targetForm) {
+            // ... (keep functionality)
+        }
+
+        function navigateToDashboard(context) {
+            const lang = document.getElementById('lang-select').value;
+            const t = translations[lang] || translations.en;
+            let uName = '';
+
+            if (context === 'login') {
+                uName = document.getElementById('username').value.trim();
+                if (!uName) uName = t.default_user;
+            } else if (context === 'guest') {
+                uName = t.guest_user;
+            }
+
+            let url = 'dashboard.html';
+            url += `?lang=${lang}`;
+            if (uName) {
+                url += '&user=' + encodeURIComponent(uName);
+            }
+            window.location.href = url;
+        }
+
+
+
+        function changePortalLanguage(lang) {
+            const urlParams = new URLSearchParams(window.location.search);
+            urlParams.set('lang', lang);
+            window.location.search = urlParams.toString();
+        }
+
+
+    </script>
+</body>
+
+</html>

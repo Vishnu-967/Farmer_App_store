@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - Farmer Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        .page-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 850px) {
+            .page-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Sidebar Styling */
+        .profile-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .profile-summary-card {
+            padding: 30px;
+            text-align: center;
+        }
+
+        .profile-avatar-large {
+            width: 100px;
+            height: 100px;
+            background: var(--primary-green);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            font-weight: 700;
+            color: white;
+            box-shadow: 0 10px 30px rgba(46, 204, 113, 0.3);
+        }
+
+        .farmer-name {
+            font-size: 24px;
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .farmer-id {
+            font-size: 14px;
+            color: var(--text-muted);
+            font-family: monospace;
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .nav-item {
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            color: #ddd;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .nav-item.active {
+            background: rgba(46, 204, 113, 0.1);
+            border-color: rgba(46, 204, 113, 0.3);
+            color: var(--primary-green);
+        }
+
+        /* Main Content Area */
+        .profile-main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .section-card {
+            padding: 30px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 15px;
+        }
+
+        .section-header h2 {
+            font-size: 20px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .edit-btn {
+            background: rgba(46, 204, 113, 0.1);
+            color: var(--primary-green);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid rgba(46, 204, 113, 0.2);
+        }
+
+        .edit-btn:hover {
+            background: var(--primary-green);
+            color: white;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+        }
+
+        @media (max-width: 600px) {
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .detail-label {
+            font-size: 13px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .detail-value {
+            font-size: 16px;
+            color: white;
+            font-weight: 500;
+        }
+
+        /* Settings Style */
+        .settings-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .setting-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+        }
+
+        .setting-info h4 {
+            color: white;
+            margin-bottom: 4px;
+        }
+
+        .setting-info p {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .toggle-switch {
+            width: 50px;
+            height: 26px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            top: 3px;
+            left: 3px;
+            transition: all 0.2s;
+        }
+
+        .toggle-switch.active {
+            background: var(--primary-green);
+        }
+
+        .toggle-switch.active::after {
+            left: 27px;
+        }
+
+        .language-badge {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 6px 12px;
+            border-radius: 6px;
+            color: white;
+            font-size: 14px;
+        }
+
+        .bank-details-placeholder {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px dashed rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-left">
+            <div class="logo-circle-small">
+                <img src="assets/logo.png" alt="Farmers Logo">
+            </div>
+            <span class="nav-title" data-t="profile_title">Profile & Settings</span>
+        </div>
+        <div class="nav-right">
+            <a href="dashboard.html" class="logout-btn" id="dash-btn"
+                style="color:white; background: rgba(255, 255, 255, 0.1);">Dashboard</a>
+        </div>
+    </nav>
+
+    <div class="page-container">
+        <!-- Sidebar -->
+        <aside class="profile-sidebar">
+            <div class="profile-summary-card glass-panel">
+                <div class="profile-avatar-large" id="sidebar-avatar">M</div>
+                <h3 class="farmer-name" id="sidebar-name">Madhu</h3>
+                <span class="farmer-id">FARM-2026-8842</span>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="#personal" class="nav-item active">
+                    <span>👤</span> <span data-t="personal_info">Personal Info</span>
+                </a>
+                <a href="#farming" class="nav-item">
+                    <span>🚜</span> <span data-t="farming_details">Farming Details</span>
+                </a>
+                <a href="#settings" class="nav-item">
+                    <span>⚙️</span> <span data-t="portal_settings">Portal Settings</span>
+                </a>
+                <a href="#support" class="nav-item">
+                    <span>❓</span> <span data-t="help_support">Help & Support</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="profile-main-content">
+            <!-- Personal Information -->
+            <section id="personal" class="section-card glass-panel">
+                <div class="section-header">
+                    <h2 data-t="personal_info"><span>👤</span> Personal Details</h2>
+                    <button class="edit-btn" onclick="openEditModal('personal')">Edit Profile</button>
+                </div>
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <span class="detail-label" data-t="full_name">Full Name</span>
+                        <span class="detail-value" id="disp-name">Madhu</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label" data-t="phone_number">Phone Number</span>
+                        <span class="detail-value" id="disp-phone">+91 6305998434</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label" data-t="email">Email Address</span>
+                        <span class="detail-value" id="disp-email">madhu.farmer@domain.com</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label" data-t="village">Primary Village</span>
+                        <span class="detail-value" id="disp-village">Kadapa, AP</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Agricultural Information -->
+            <section id="farming" class="section-card glass-panel">
+                <div class="section-header">
+                    <h2 data-t="farming_details"><span>🚜</span> Farming & Land Details</h2>
+                    <button class="edit-btn" onclick="openEditModal('farming')">Update Details</button>
+                </div>
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <span class="detail-label" data-t="land_size">Land Size</span>
+                        <span class="detail-value" id="disp-land">4.5 Hectares</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label" data-t="main_crop">Current Main Crop</span>
+                        <span class="detail-value" id="disp-crop" data-t="crop_paddy">Paddy (Rice)</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label" data-t="secondary_crop">Secondary Crop</span>
+                        <span class="detail-value" id="disp-secondary" data-t="crop_tomato">Tomato</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label" data-t="soil_type">Soil Type</span>
+                        <span class="detail-value" id="disp-soil">Red Sandy Soil</span>
+                    </div>
+                </div>
+                <div style="margin-top: 30px;">
+                    <h4 style="color: var(--primary-green); margin-bottom: 15px; font-size: 14px;"
+                        data-t="bank_details">Bank Details
+                        (Optional)</h4>
+                    <div class="bank-details-placeholder" id="bank-status" data-t="bank_placeholder">
+                        No bank details linked yet. Link your bank to receive direct government subsidies.
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <button class="edit-btn" id="bank-link-btn" onclick="openBankModal()"
+                            style="background: rgba(46, 204, 113, 0.1); color: var(--primary-green);"
+                            data-t="link_bank_btn">+ Link Bank Account</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Portal Settings -->
+            <section id="settings" class="section-card glass-panel">
+                <div class="section-header">
+                    <h2 data-t="portal_settings"><span>⚙️</span> Portal Settings</h2>
+                </div>
+                <div class="settings-list">
+                    <div class="setting-row">
+                        <div class="setting-info">
+                            <h4 data-t="lang_selection">Language Selection</h4>
+                            <p>Current display language of the portal</p>
+                        </div>
+                        <select class="language-select" id="lang-select" onchange="changePortalLanguage(this.value)"
+                            style="background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 8px; outline: none;">
+                            <option value="en">English (India)</option>
+                            <option value="te">తెలుగు (Telugu)</option>
+                        </select>
+                    </div>
+                    <div class="setting-row">
+                        <div class="setting-info">
+                            <h4>Push Notifications</h4>
+                            <p>Alerts for weather and market changes</p>
+                        </div>
+                        <div class="toggle-switch active"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Help & Support -->
+            <section id="support" class="section-card glass-panel" style="background: rgba(46, 204, 113, 0.05);">
+                <div class="section-header" style="border-bottom-color: rgba(46, 204, 113, 0.2);">
+                    <h2 style="color: var(--primary-green);"><span style="color: white;">❓</span> <span
+                            data-t="help_support">Help & Support</span></h2>
+                </div>
+                <div class="settings-list">
+                    <a href="#" class="nav-item">
+                        <span>📖</span> View Portal Documentation
+                    </a>
+                    <a href="chat.html" class="nav-item chat-support-link">
+                        <span>💬</span> Chat with Agricultural Expert
+                    </a>
+                    <a href="tel:1800-123-4567" class="nav-item" style="color: var(--primary-green);">
+                        <span>📞</span> Kisan Helpline: 1800-123-4567
+                    </a>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal"
+        style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); align-items: center; justify-content: center;">
+        <div class="glass-panel" style="width: 90%; max-width: 500px; padding: 30px; position: relative;">
+            <button onclick="closeEditModal()"
+                style="position: absolute; right: 20px; top: 20px; background: none; border: none; color: white; font-size: 24px; cursor: pointer;">&times;</button>
+            <h2 id="modalTitle" style="color: white; margin-bottom: 25px;">Edit Profile</h2>
+
+            <form id="editForm" onsubmit="saveEdits(event)">
+                <div id="personalFields" style="display: none;">
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; color: var(--text-muted); font-size: 13px; margin-bottom: 5px;"
+                            data-t="full_name">Full Name</label>
+                        <input type="text" id="edit-name"
+                            style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 12px; border-radius: 8px; color: white;">
+                    </div>
+                </div>
+                <button type="submit"
+                    style="width: 100%; background: var(--primary-green); color: white; padding: 14px; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; margin-top: 10px;">Save
+                    Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bank Link Modal -->
+    <div id="bankModal" class="modal"
+        style="display: none; position: fixed; z-index: 1001; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); align-items: center; justify-content: center;">
+        <div class="glass-panel"
+            style="width: 90%; max-width: 450px; padding: 35px; border: 1px solid rgba(46, 204, 113, 0.3);">
+            <h2 style="color: white; margin-bottom: 20px; display: flex; align-items: center; gap: 12px;">
+                <span style="font-size: 24px;">🏦</span> Link Bank Account
+            </h2>
+            <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 25px;">Enter your bank details to enable
+                direct subsidy transfers.</p>
+
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+                <div class="input-group">
+                    <label style="display: block; color: var(--text-muted); font-size: 12px; margin-bottom: 6px;">BANK
+                        NAME</label>
+                    <input type="text" id="bank-name" placeholder="SBI, HDFC, Andhra Bank, etc."
+                        style="width: 100%; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); padding: 14px; border-radius: 10px; color: white; outline: none;">
+                </div>
+                <div class="input-group">
+                    <label
+                        style="display: block; color: var(--text-muted); font-size: 12px; margin-bottom: 6px;">ACCOUNT
+                        NUMBER</label>
+                    <input type="password" id="acc-num" placeholder="XXXX XXXX XXXX"
+                        style="width: 100%; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); padding: 14px; border-radius: 10px; color: white; outline: none;">
+                </div>
+                <div class="input-group">
+                    <label style="display: block; color: var(--text-muted); font-size: 12px; margin-bottom: 6px;">IFSC
+                        CODE</label>
+                    <input type="text" id="ifsc-code" placeholder="SBIN0001234"
+                        style="width: 100%; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); padding: 14px; border-radius: 10px; color: white; outline: none; text-transform: uppercase;">
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 30px;">
+                <button onclick="closeBankModal()"
+                    style="flex: 1; background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); padding: 14px; border-radius: 12px; font-weight: 600; cursor: pointer;">Cancel</button>
+                <button onclick="linkBank()"
+                    style="flex: 2; background: var(--primary-green); color: white; border: none; padding: 14px; border-radius: 12px; font-weight: 600; cursor: pointer; box-shadow: 0 10px 20px rgba(46, 204, 113, 0.2);">Link
+                    Account</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="translations.js"></script>
+    <script>
+        function openBankModal() { document.getElementById('bankModal').style.display = 'flex'; }
+        function closeBankModal() { document.getElementById('bankModal').style.display = 'none'; }
+
+        function linkBank() {
+            const name = document.getElementById('bank-name').value;
+            const acc = document.getElementById('acc-num').value;
+            if (!name || !acc) return alert("Please enter details");
+
+            const maskedAcc = "XXXX" + acc.slice(-4);
+            const statusBox = document.getElementById('bank-status');
+            statusBox.innerHTML = `
+                <div style="background: rgba(46, 204, 113, 0.1); border: 1px solid rgba(46, 204, 113, 0.3); padding: 15px; border-radius: 12px; text-align: left; display: flex; align-items: center; gap: 15px;">
+                    <div style="font-size: 24px;">✅</div>
+                    <div>
+                        <div style="color: white; font-weight: 600;">Linked: ${name}</div>
+                        <div style="color: var(--text-muted); font-size: 13px;">A/c: ${maskedAcc} (Active for Subsidies)</div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('bank-link-btn').style.display = 'none';
+            closeBankModal();
+        }
+
+        function openEditModal(section) {
+            const modal = document.getElementById('editModal');
+            document.getElementById('personalFields').style.display = section === 'personal' ? 'block' : 'none';
+            modal.style.display = 'flex';
+        }
+
+        function closeEditModal() { document.getElementById('editModal').style.display = 'none'; }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const user = urlParams.get('user');
+            const lang = urlParams.get('lang') || 'en';
+
+            if (user) {
+                const displayName = user.charAt(0).toUpperCase() + user.slice(1).toLowerCase();
+                document.getElementById('sidebar-name').innerText = displayName;
+                document.getElementById('disp-name').innerText = displayName;
+                document.getElementById('sidebar-avatar').innerText = user.charAt(0).toUpperCase();
+                document.getElementById('dash-btn').href = `dashboard.html?user=${user}&lang=${lang}`;
+
+                const chatLink = document.querySelector('.chat-support-link');
+                if (chatLink) chatLink.href = `chat.html?user=${user}&lang=${lang}`;
+            }
+        });
+    </script>
+</body>
+
+</html>
+</body>
+
+</html>

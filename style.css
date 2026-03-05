@@ -1,0 +1,288 @@
+/* Root Variables for theming */
+:root {
+    --primary-green: #2ecc71;
+    --primary-green-hover: #27ae60;
+    --text-dark: #2c3e50;
+    --text-light: #ffffff;
+    --text-muted: #e2e8f0;
+    --glass-bg: rgba(25, 42, 28, 0.65);
+    /* Dark green tinted glass */
+    --glass-border: rgba(255, 255, 255, 0.15);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Outfit', sans-serif;
+}
+
+/* Body Layout */
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* This centers the login wrapper vertically and horizontally */
+    /* Use the generated background image */
+    background: url('assets/bg.png') center/cover no-repeat fixed;
+    background-color: #1a2f24;
+    /* Fallback color */
+    padding-top: 150px;
+    /* Push the login form somewhat down to make space for header */
+}
+
+/* Overlay to darken background slightly for better contrast */
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.2) 100%);
+    z-index: 1;
+}
+
+/* Logo position at top-left */
+.logo-container {
+    position: absolute;
+    top: 30px;
+    left: 40px;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    overflow: hidden;
+}
+
+.logo-circle img.logo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(0.9);
+}
+
+/* Footer Motto at the very bottom */
+.page-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 30px 20px;
+    text-align: center;
+    z-index: 10;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+}
+
+.page-footer h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #ffffff;
+    text-shadow: 0 4px 10px rgba(0, 0, 0, 0.8);
+    letter-spacing: 1px;
+}
+
+/* Header Section centered at the top */
+.header-section {
+    position: absolute;
+    top: 40px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    z-index: 10;
+    padding: 0 20px;
+}
+
+.welcome-title {
+    font-size: 42px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+    text-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+}
+
+.tagline {
+    font-size: 18px;
+    color: var(--text-muted);
+    font-weight: 400;
+    line-height: 1.5;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+/* Container Wrapper */
+.login-wrapper {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 480px;
+    padding: 20px;
+    perspective: 1000px;
+}
+
+/* Main Login Container (Transparent) */
+.login-container {
+    background: transparent;
+    padding: 40px;
+    color: var(--text-light);
+    transform: translateY(0);
+    transition: all 0.4s ease;
+}
+
+/* Header Section */
+/* The original header-section, logo-circle, welcome-title, tagline rules are replaced by the new ones above. */
+
+/* Form Styles */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.input-group label {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+    margin-left: 4px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 16px 20px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    color: white;
+    font-size: 16px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.input-group input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.input-group input:focus {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 4px rgba(46, 204, 113, 0.15);
+}
+
+/* Form Actions (Remember me & Forgot Password) */
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    margin-top: -8px;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    color: var(--text-muted);
+}
+
+.remember-me input[type="checkbox"] {
+    accent-color: var(--primary-green);
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.forgot-password {
+    color: var(--primary-green);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.forgot-password:hover {
+    color: #fff;
+}
+
+/* Login Button */
+.login-btn {
+    width: 100%;
+    padding: 16px;
+    margin-top: 8px;
+    background: linear-gradient(135deg, var(--primary-green) 0%, #208b4a 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(46, 204, 113, 0.4);
+}
+
+.login-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(46, 204, 113, 0.6);
+    background: linear-gradient(135deg, #37da7d 0%, #25a256 100%);
+}
+
+.login-btn:active {
+    transform: translateY(0);
+}
+
+/* Footer Section */
+.footer-section {
+    margin-top: 32px;
+    text-align: center;
+    font-size: 14px;
+    color: var(--text-muted);
+}
+
+.footer-section a {
+    color: var(--primary-green);
+    text-decoration: none;
+    font-weight: 600;
+    margin-left: 4px;
+    transition: color 0.3s ease;
+}
+
+.footer-section a:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .glass-card {
+        padding: 40px 24px;
+    }
+
+    .welcome-title {
+        font-size: 24px;
+    }
+}

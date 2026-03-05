@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crop Information - Farmer Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        /* Specific Styles for Crop Info Page */
+        .crop-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .page-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-4px);
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: white;
+        }
+
+        /* Crop Selection Layout */
+        .crop-selection-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .crop-selector-card {
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .crop-selector-card:hover {
+            background: rgba(46, 204, 113, 0.15);
+            border-color: var(--primary-green);
+            transform: translateY(-5px);
+        }
+
+        .crop-selector-card.active {
+            background: rgba(46, 204, 113, 0.25);
+            border-color: var(--primary-green);
+            box-shadow: 0 0 20px rgba(46, 204, 113, 0.3);
+        }
+
+        .crop-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .crop-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: white;
+        }
+
+        /* Detailed Crop Info Area */
+        #crop-details-area {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .info-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .info-card {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 25px;
+        }
+
+        .info-card h3 {
+            color: var(--primary-green);
+            font-size: 18px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-card p,
+        .info-card li {
+            color: var(--text-muted);
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .info-card ul {
+            padding-left: 20px;
+        }
+
+        .info-card li {
+            margin-bottom: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .info-cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Top Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <div class="logo-circle-small">
+                <img src="assets/logo.png" alt="Farmers Logo">
+            </div>
+            <span class="nav-title" data-t="crop_info">Crop Info</span>
+        </div>
+        <div class="nav-right">
+            <a href="dashboard.html" class="logout-btn" id="dash-link"
+                style="color:white; background: rgba(255,255,255,0.1);" data-t="dashboard">
+                Dashboard
+            </a>
+        </div>
+    </nav>
+
+    <main class="crop-container">
+        <div class="page-header">
+            <a href="dashboard.html" class="back-btn" id="back-link">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                <span data-t="back">Back</span>
+            </a>
+            <h1 class="page-title" data-t="select_crop">Select Your Crop</h1>
+        </div>
+
+        <!-- Crop Selection Grid -->
+        <div class="crop-selection-grid">
+            <div class="crop-selector-card" onclick="selectCrop('rice', this)">
+                <div class="crop-icon">🌾</div>
+                <div class="crop-name" data-t="crop_paddy">Rice (Paddy)</div>
+            </div>
+            <div class="crop-selector-card" onclick="selectCrop('wheat', this)">
+                <div class="crop-icon">🌾</div>
+                <div class="crop-name" data-t="crop_wheat">Wheat</div>
+            </div>
+            <div class="crop-selector-card" onclick="selectCrop('cotton', this)">
+                <div class="crop-icon">🌿</div>
+                <div class="crop-name" data-t="crop_cotton">Cotton</div>
+            </div>
+            <div class="crop-selector-card" onclick="selectCrop('tomato', this)">
+                <div class="crop-icon">🍅</div>
+                <div class="crop-name" data-t="crop_tomato">Tomato</div>
+            </div>
+            <div class="crop-selector-card" onclick="selectCrop('onion', this)">
+                <div class="crop-icon">🧅</div>
+                <div class="crop-name" data-t="crop_onion">Onion</div>
+            </div>
+            <div class="crop-selector-card" onclick="selectCrop('carrot', this)">
+                <div class="crop-icon">🥕</div>
+                <div class="crop-name" data-t="crop_carrot">Carrot</div>
+            </div>
+        </div>
+
+        <!-- Detailed Info Display Area -->
+        <div id="crop-details-area" class="glass-panel" style="padding: 30px;">
+            <h2 id="detail-crop-title" style="font-size: 24px; margin-bottom: 25px; color: white;"
+                data-t="crop_details_label">Crop Details</h2>
+
+            <div class="info-cards-grid">
+                <!-- Ideal Soil -->
+                <div class="info-card">
+                    <h3 data-t="soil_label">Ideal Soil Type</h3>
+                    <p id="info-soil">Select a crop to see details.</p>
+                </div>
+                <!-- Best Season -->
+                <div class="info-card">
+                    <h3 data-t="season_label">Best Season</h3>
+                    <p id="info-season">Select a crop to see details.</p>
+                </div>
+                <!-- Sowing & Harvesting -->
+                <div class="info-card">
+                    <h3 data-t="sowing_harvesting_label">🗓 Sowing & Harvesting</h3>
+                    <p id="info-sowing">Select a crop to see details.</p>
+                </div>
+                <!-- Fertilizer -->
+                <div class="info-card">
+                    <h3 data-t="fertilizer_label">💊 Fertilizer Recommendation</h3>
+                    <p id="info-fertilizer">Select a crop to see details.</p>
+                </div>
+                <!-- Pest Control -->
+                <div class="info-card">
+                    <h3 data-t="pest_control_label">🐛 Pest & Disease Control</h3>
+                    <p id="info-pest">Select a crop to see details.</p>
+                </div>
+                <!-- Diseases & Treatment -->
+                <div class="info-card">
+                    <h3 data-t="diseases_treatment_label">🦠 Diseases & Treatment</h3>
+                    <p id="info-diseases">Select a crop to see details.</p>
+                </div>
+                <!-- Irrigation -->
+                <div class="info-card">
+                    <h3 data-t="irrigation_label">💧 Irrigation Suggestions</h3>
+                    <p id="info-irrigation">Select a crop to see details.</p>
+                </div>
+                <!-- Yield -->
+                <div class="info-card">
+                    <h3 data-t="yield_duration_label">📈 Yield & Duration</h3>
+                    <p id="info-yield">Select a crop to see details.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="translations.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const user = urlParams.get('user');
+            const lang = urlParams.get('lang') || 'en';
+
+            if (user) {
+                const link = `dashboard.html?user=${user}&lang=${lang}`;
+                document.getElementById('dash-link').href = link;
+                document.getElementById('back-link').href = link;
+            }
+        });
+
+        function selectCrop(crop, el) {
+            const urlParams = new URLSearchParams(window.location.search);
+            const lang = urlParams.get('lang') || 'en';
+            const t = translations[lang] || translations.en;
+
+            document.querySelectorAll('.crop-selector-card').forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
+            document.getElementById('crop-details-area').style.display = 'block';
+
+            // Define mapping for detail keys from translations.js
+            const cropKeyMap = {
+                'rice': {
+                    soil: 'rice_soil',
+                    season: 'rice_season',
+                    sowing: 'rice_sowing_harvesting',
+                    fertilizer: 'rice_fertilizer',
+                    pest: 'rice_pest_control',
+                    diseases: 'rice_diseases',
+                    irrigation: 'rice_irrigation',
+                    yield: 'rice_yield_duration'
+                },
+                'wheat': {
+                    soil: 'wheat_soil',
+                    season: 'wheat_season',
+                    sowing: 'wheat_sowing_harvesting',
+                    fertilizer: 'wheat_fertilizer',
+                    pest: 'wheat_pest_control',
+                    diseases: 'wheat_diseases',
+                    irrigation: 'wheat_irrigation',
+                    yield: 'wheat_yield_duration'
+                },
+                'cotton': {
+                    soil: 'cotton_soil',
+                    season: 'cotton_season',
+                    sowing: 'cotton_sowing_harvesting',
+                    fertilizer: 'cotton_fertilizer',
+                    pest: 'cotton_pest_control',
+                    diseases: 'cotton_diseases',
+                    irrigation: 'cotton_irrigation',
+                    yield: 'cotton_yield_duration'
+                },
+                'tomato': {
+                    soil: 'tomato_soil',
+                    season: 'tomato_season',
+                    sowing: 'tomato_sowing_harvesting',
+                    fertilizer: 'tomato_fertilizer',
+                    pest: 'tomato_pest_control',
+                    diseases: 'tomato_diseases',
+                    irrigation: 'tomato_irrigation',
+                    yield: 'tomato_yield_duration'
+                },
+                'onion': {
+                    soil: 'onion_soil',
+                    season: 'onion_season',
+                    sowing: 'onion_sowing_harvesting',
+                    fertilizer: 'onion_fertilizer',
+                    pest: 'onion_pest_control',
+                    diseases: 'onion_diseases',
+                    irrigation: 'onion_irrigation',
+                    yield: 'onion_yield_duration'
+                },
+                'carrot': {
+                    soil: 'carrot_soil',
+                    season: 'carrot_season',
+                    sowing: 'carrot_sowing_harvesting',
+                    fertilizer: 'carrot_fertilizer',
+                    pest: 'carrot_pest_control',
+                    diseases: 'carrot_diseases',
+                    irrigation: 'carrot_irrigation',
+                    yield: 'carrot_yield_duration'
+                }
+            };
+
+            const keys = cropKeyMap[crop];
+            if (keys) {
+                document.getElementById('detail-crop-title').innerText = el.querySelector('.crop-name').innerText;
+                document.getElementById('info-soil').innerText = t[keys.soil] || "N/A";
+                document.getElementById('info-season').innerText = t[keys.season] || "N/A";
+                document.getElementById('info-sowing').innerText = t[keys.sowing] || "N/A";
+                document.getElementById('info-fertilizer').innerText = t[keys.fertilizer] || "N/A";
+                document.getElementById('info-pest').innerText = t[keys.pest] || "N/A";
+                document.getElementById('info-diseases').innerText = t[keys.diseases] || "N/A";
+                document.getElementById('info-irrigation').innerText = t[keys.irrigation] || "N/A";
+                document.getElementById('info-yield').innerText = t[keys.yield] || "N/A";
+
+                // Scroll to details on mobile
+                if (window.innerWidth < 768) {
+                    document.getElementById('crop-details-area').scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        }
+    </script>
+</body>
+
+</body>
+
+</html>

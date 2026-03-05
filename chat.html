@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmer Chat Support - Farmer Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        .chat-container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 0 20px;
+            height: calc(100vh - 200px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-messages {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 12px 18px;
+            border-radius: 15px;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        .message.expert {
+            align-self: flex-start;
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            border-bottom-left-radius: 2px;
+        }
+
+        .message.user {
+            align-self: flex-end;
+            background: var(--primary-green);
+            color: white;
+            border-bottom-right-radius: 2px;
+        }
+
+        .chat-input-area {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 14px 20px;
+            border-radius: 15px;
+            color: white;
+            outline: none;
+        }
+
+        .send-btn {
+            background: var(--primary-green);
+            color: white;
+            border: none;
+            padding: 0 25px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .expert-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #2ecc71;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #2ecc71;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #2ecc71;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-left">
+            <div class="logo-circle-small">
+                <img src="assets/logo.png" alt="Farmers Logo">
+            </div>
+            <span class="nav-title" data-t="chat_header">Farmer Chat Support</span>
+        </div>
+        <div class="nav-right">
+            <a href="dashboard.html" class="logout-btn" id="dash-btn"
+                style="color:white; background: rgba(255, 255, 255, 0.1);">Dashboard</a>
+        </div>
+    </nav>
+
+    <div class="chat-container">
+        <div class="expert-status">
+            <div class="status-dot"></div>
+            <span data-t="expert_online">Agricultural Expert is Online</span>
+        </div>
+
+        <div class="chat-messages glass-panel" id="chat-messages">
+            <div class="message expert" data-t="expert_greet">
+                Hello! I am your agricultural expert. How can I help you today?
+            </div>
+        </div>
+
+        <div class="chat-input-area">
+            <input type="text" id="chat-input" class="chat-input" placeholder="Type your message..." data-t="type_msg">
+            <button class="send-btn" onclick="sendMessage()" data-t="send">Send</button>
+        </div>
+    </div>
+
+    <script src="translations.js"></script>
+    <script>
+        function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const msg = input.value.trim();
+            if (!msg) return;
+
+            const messages = document.getElementById('chat-messages');
+
+            // Add user message
+            const userDiv = document.createElement('div');
+            userDiv.className = 'message user';
+            userDiv.innerText = msg;
+            messages.appendChild(userDiv);
+
+            input.value = '';
+            messages.scrollTop = messages.scrollHeight;
+
+            // Simple auto-reply for demo
+            setTimeout(() => {
+                const expertDiv = document.createElement('div');
+                expertDiv.className = 'message expert';
+                expertDiv.innerText = "That is a great question. Let me look into that for you.";
+                messages.appendChild(expertDiv);
+                messages.scrollTop = messages.scrollHeight;
+            }, 1000);
+        }
+
+        document.getElementById('chat-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const user = urlParams.get('user');
+            const lang = urlParams.get('lang') || 'en';
+
+            if (user) {
+                document.getElementById('dash-btn').href = `dashboard.html?user=${user}&lang=${lang}`;
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Government Schemes - Farmer Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        .page-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .header-section {
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .schemes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+        }
+
+        .scheme-card {
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            transition: transform 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .scheme-card:hover {
+            transform: translateY(-8px);
+        }
+
+        .scheme-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            background: rgba(46, 204, 113, 0.2);
+            color: #2ecc71;
+        }
+
+        .scheme-badge.deadline {
+            background: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+        }
+
+        .scheme-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .scheme-icon {
+            font-size: 32px;
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 15px;
+        }
+
+        .scheme-title h2 {
+            font-size: 20px;
+            color: white;
+            margin-bottom: 4px;
+        }
+
+        .scheme-title span {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .info-section {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .info-block h4 {
+            font-size: 14px;
+            color: var(--primary-green);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-block p,
+        .info-block ul {
+            font-size: 14px;
+            color: #ddd;
+            line-height: 1.5;
+        }
+
+        .info-block ul {
+            padding-left: 20px;
+        }
+
+        .deadline-reminder {
+            background: rgba(241, 196, 15, 0.1);
+            border: 1px dashed rgba(241, 196, 15, 0.3);
+            padding: 12px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            color: #f1c40f;
+        }
+
+        .apply-btn {
+            background: var(--primary-green);
+            color: white;
+            text-decoration: none;
+            text-align: center;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 600;
+            margin-top: auto;
+            transition: all 0.2s;
+        }
+
+        .apply-btn:hover {
+            filter: brightness(1.1);
+            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-left">
+            <div class="logo-circle-small">
+                <img src="assets/logo.png" alt="Farmers Logo">
+            </div>
+            <span class="nav-title" data-t="nav_schemes">Govt. Schemes Portal</span>
+        </div>
+        <div class="nav-right" id="global-lang-nav">
+            <!-- Language selector will be here if needed, or handled via dashboard -->
+            <a href="dashboard.html" class="logout-btn" id="dash-link"
+                style="color:white; background: rgba(255,255,255,0.1);" data-t="dashboard">Dashboard</a>
+        </div>
+    </nav>
+
+    <div class="page-container">
+        <div class="header-section">
+            <div>
+                <h1 style="color: white; margin-bottom: 10px;" data-t="schemes_hero">Available Schemes & Subsidies</h1>
+                <p style="color: var(--text-muted);" data-t="schemes_sub">Empowering farmers with direct financial and
+                    technical support.</p>
+            </div>
+        </div>
+
+        <div class="schemes-grid">
+            <!-- PM-KISAN -->
+            <div class="scheme-card glass-panel"
+                style="border: 1px solid rgba(241, 196, 15, 0.4); background: rgba(241, 196, 15, 0.05);">
+                <span class="scheme-badge" data-t="high_subsidy">High Subsidy</span>
+                <div class="scheme-header">
+                    <div class="scheme-icon">💵</div>
+                    <div class="scheme-title">
+                        <h2 data-t="pm_kisan_title">PM-KISAN (Direct Income Support)</h2>
+                        <span data-t="pm_kisan_desc">₹6,000 per year in three installments</span>
+                    </div>
+                </div>
+                <div class="info-section">
+                    <div class="info-block">
+                        <h4 data-t="eligibility">Eligibility Criteria</h4>
+                        <p data-t="pm_kisan_elig">Small and marginal farmers with land up to 2 hectares.</p>
+                    </div>
+                    <div class="info-block">
+                        <h4 data-t="documents">Required Documents</h4>
+                        <p data-t="pm_kisan_docs">Aadhaar card, Land documents, Bank account details.</p>
+                    </div>
+                </div>
+                <div class="deadline-reminder">
+                    <span>⏳</span>
+                    <span data-t="pm_kisan_rem">Next installment due in April 2026.</span>
+                </div>
+                <a href="https://pmkisan.gov.in/" target="_blank" class="apply-btn"
+                    style="background: #f1c40f; color: #000;" data-t="apply_online">Apply Online (PM-KISAN)</a>
+            </div>
+
+            <!-- Crop Insurance -->
+            <div class="scheme-card glass-panel"
+                style="border: 1px solid rgba(46, 204, 113, 0.4); background: rgba(46, 204, 113, 0.05);">
+                <span class="scheme-badge" data-t="seasonal_pri">Seasonal Priority</span>
+                <div class="scheme-header">
+                    <div class="scheme-icon">🌾</div>
+                    <div class="scheme-title">
+                        <h2 data-t="pmfby_title">PM Fasal Bima Yojana (Crop Insurance)</h2>
+                        <span data-t="pmfby_desc">Financial Protection against Crop Loss</span>
+                    </div>
+                </div>
+                <div class="info-section">
+                    <div class="info-block">
+                        <h4 data-t="eligibility">Eligibility Criteria</h4>
+                        <p data-t="pmfby_elig">All farmers including sharecroppers and tenant farmers growing notified
+                            crops.</p>
+                    </div>
+                    <div class="info-block">
+                        <h4 data-t="documents">Required Documents</h4>
+                        <p data-t="pmfby_docs">Aadhaar, Bank Passbook, Land records/Rent agreement, Sowing certificate.
+                        </p>
+                    </div>
+                </div>
+                <div class="deadline-reminder">
+                    <span>⏳</span>
+                    <span data-t="pmfby_rem">Last date for Kharif: July 31, 2026.</span>
+                </div>
+                <a href="https://pmfby.gov.in" target="_blank" class="apply-btn" data-t="apply_online">Apply Online
+                    (PMFBY)</a>
+            </div>
+
+            <!-- Irrigation Schemes -->
+            <div class="scheme-card glass-panel"
+                style="border: 1px solid rgba(52, 152, 219, 0.4); background: rgba(52, 152, 219, 0.05);">
+                <span class="scheme-badge" data-t="high_subsidy">Direct Subsidy</span>
+                <div class="scheme-header">
+                    <div class="scheme-icon">💧</div>
+                    <div class="scheme-title">
+                        <h2 data-t="pmksy_title">PM Krishi Sinchayee (Irrigation)</h2>
+                        <span data-t="pmksy_desc">Drip & Sprinkler Subsidies</span>
+                    </div>
+                </div>
+                <div class="info-section">
+                    <div class="info-block">
+                        <h4 data-t="eligibility">Eligibility Criteria</h4>
+                        <p data-t="pmksy_elig">Farmers with valid land ownership and access to a water source.</p>
+                    </div>
+                    <div class="info-block">
+                        <h4 data-t="documents">Required Documents</h4>
+                        <p data-t="pmksy_docs">Aadhaar, Land records, Quotation from registered dealer, Water source
+                            proof.</p>
+                    </div>
+                </div>
+                <div class="deadline-reminder" style="color: #3498db; border-color: rgba(52, 152, 219, 0.3);">
+                    <span>📅</span>
+                    <span data-t="pmksy_rem">Apply before Monsoon push: July 31, 2026.</span>
+                </div>
+                <a href="https://pmksy.gov.in/" target="_blank" class="apply-btn" style="background: #3498db;"
+                    data-t="apply_online">Apply Online (PMKSY)</a>
+            </div>
+
+            <!-- Farm Equipment Subsidy -->
+            <div class="scheme-card glass-panel"
+                style="border: 1px solid rgba(46, 204, 113, 0.4); background: rgba(46, 204, 113, 0.05);">
+                <span class="scheme-badge deadline" data-t="limited_slots">Limited Slots</span>
+                <div class="scheme-header">
+                    <div class="scheme-icon">🚜</div>
+                    <div class="scheme-title">
+                        <h2 data-t="agri_mech_title">Farm Equipment Subsidy</h2>
+                        <span data-t="agri_mech_desc">Subsidy on tractors and tools</span>
+                    </div>
+                </div>
+                <div class="info-section">
+                    <div class="info-block">
+                        <h4 data-t="eligibility">Eligibility Criteria</h4>
+                        <p data-t="agri_mech_elig">Registered farmers and individual owners.</p>
+                    </div>
+                    <div class="info-block">
+                        <h4 data-t="documents">Required Documents</h4>
+                        <p data-t="agri_mech_docs">Farmer ID, Land record (Pattadar Passbook), Quotation of equipment.
+                        </p>
+                    </div>
+                </div>
+                <div class="deadline-reminder" style="color: #2ecc71; border-color: rgba(46, 204, 113, 0.3);">
+                    <span>📅</span>
+                    <span data-t="agri_mech_rem">Deadline for current batch: March 15, 2026.</span>
+                </div>
+                <a href="https://agrimachinery.nic.in/" target="_blank" class="apply-btn" data-t="apply_online">Apply
+                    Online (Agri-Machinery)</a>
+            </div>
+
+            <!-- Kisan Credit Card -->
+            <div class="scheme-card glass-panel"
+                style="border: 1px solid rgba(52, 152, 219, 0.4); background: rgba(52, 152, 219, 0.05);">
+                <span class="scheme-badge" data-t="high_subsidy">Low Interest</span>
+                <div class="scheme-header">
+                    <div class="scheme-icon">🏦</div>
+                    <div class="scheme-title">
+                        <h2 data-t="kcc_title">Kisan Credit Card (KCC)</h2>
+                        <span data-t="kcc_desc">Low-interest credit for farming needs</span>
+                    </div>
+                </div>
+                <div class="info-section">
+                    <div class="info-block">
+                        <h4 data-t="eligibility">Eligibility Criteria</h4>
+                        <p data-t="kcc_elig">All farmers, including owner cultivators/tenant farmers.</p>
+                    </div>
+                    <div class="info-block">
+                        <h4 data-t="documents">Required Documents</h4>
+                        <p data-t="kcc_docs">KYC documents, Land ownership proof, Crop details.</p>
+                    </div>
+                </div>
+                <div class="deadline-reminder" style="color: #3498db; border-color: rgba(52, 152, 219, 0.3);">
+                    <span>🏦</span>
+                    <span data-t="kcc_rem">Renew your KCC limit by May 30, 2026.</span>
+                </div>
+                <a href="https://www.myscheme.gov.in/schemes/kcc" target="_blank" class="apply-btn"
+                    style="background: #3498db;" data-t="apply_online">Apply Online (KCC)</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="translations.js"></script>
+    <script>
+        // State persistence and translation handled by translations.js
+    </script>
+</body>
+
+</html>
